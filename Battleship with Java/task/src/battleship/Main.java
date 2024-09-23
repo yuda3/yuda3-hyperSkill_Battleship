@@ -13,7 +13,6 @@ public class Main {
     private static final Map<String, Integer> ships = new LinkedHashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
 
-
     public static void main(String[] args) {
         createBoard();
         createField();
@@ -42,7 +41,7 @@ public class Main {
     }
 
     private static boolean checkAndPlaceShip(String placedShip, String shipType, int shipLength) {
-        String[] coordinates = placedShip.split(" ");
+        String[] coordinates = placedShip.toUpperCase().split(" ");
 
         if (coordinates.length != 2) {
             System.out.println("Error: Invalid input. Please enter two coordinates.");
@@ -62,6 +61,10 @@ public class Main {
             return false;
         }
 
+        if (isOverlapping(start, end)) {
+            return false;
+        }
+
         if (isAdjacentToAnotherShip(start, end)) {
             System.out.println("Error: You placed it too close to another one. Try again:");
             return false;
@@ -72,96 +75,162 @@ public class Main {
     }
 
     private static boolean isValidShipPlacement(String start, String end, int shipLength) {
-        char startCol = start.charAt(0);
-        int startRow = Integer.parseInt(start.substring(1));
-        char endCol = end.charAt(0);
-        int endRow = Integer.parseInt(end.substring(1));
+        char startRowChar = Character.toUpperCase(start.charAt(0));
+        int startRow = getRowIndex(startRowChar);
+        int startCol = Integer.parseInt(start.substring(1));
 
-        if (startCol == endCol) {
-            return Math.abs(endRow - startRow) + 1 == shipLength;
-        } else if (startRow == endRow) {
+        char endRowChar = Character.toUpperCase(end.charAt(0));
+        int endRow = getRowIndex(endRowChar);
+        int endCol = Integer.parseInt(end.substring(1));
+
+        if (startRow == endRow) {
             return Math.abs(endCol - startCol) + 1 == shipLength;
+        } else if (startCol == endCol) {
+            return Math.abs(endRow - startRow) + 1 == shipLength;
+        } else {
+            System.out.println("Error: Wrong ship location! Try again:");
+            return false;
         }
+    }
 
-        System.out.println("Error: Wrong ship location! Try again:");
+    private static boolean isOverlapping(String start, String end) {
+        List<String> coordinates = getCoordinatesBetween(start, end);
+        for (String coordinate : coordinates) {
+            if (field.get(coordinate) == 1) {
+                System.out.println("Error: You placed it on another ship. Try again:");
+                return true;
+            }
+        }
         return false;
     }
 
-    private static boolean isAdjacentToAnotherShip(String start, String end) {
-        char startCol = start.charAt(0);
-        int startRow = Integer.parseInt(start.substring(1));
-        char endCol = end.charAt(0);
-        int endRow = Integer.parseInt(end.substring(1));
+    private static List<String> getCoordinatesBetween(String start, String end) {
+        List<String> coordinates = new ArrayList<>();
+        char startRowChar = Character.toUpperCase(start.charAt(0));
+        int startRow = getRowIndex(startRowChar);
+        int startCol = Integer.parseInt(start.substring(1));
+
+        char endRowChar = Character.toUpperCase(end.charAt(0));
+        int endRow = getRowIndex(endRowChar);
+        int endCol = Integer.parseInt(end.substring(1));
 
         int minRow = Math.min(startRow, endRow);
         int maxRow = Math.max(startRow, endRow);
-        char minCol = (char) Math.min(startCol, endCol);
-        char maxCol = (char) Math.max(startCol, endCol);
+        int minCol = Math.min(startCol, endCol);
+        int maxCol = Math.max(startCol, endCol);
+
+        if (startRow == endRow) {
+            // Horizontal ship
+            for (int col = minCol; col <= maxCol; col++) {
+                String coordinate = startRowChar + "" + col;
+                coordinates.add(coordinate);
+            }
+        } else {
+            // Vertical ship
+            for (int row = minRow; row <= maxRow; row++) {
+                String coordinate = aToJ.charAt(row - 1) + "" + startCol;
+                coordinates.add(coordinate);
+            }
+        }
+        return coordinates;
+    }
+
+    private static boolean isAdjacentToAnotherShip(String start, String end) {
+        char startRowChar = Character.toUpperCase(start.charAt(0));
+        int startRow = getRowIndex(startRowChar);
+        int startCol = Integer.parseInt(start.substring(1));
+
+        char endRowChar = Character.toUpperCase(end.charAt(0));
+        int endRow = getRowIndex(endRowChar);
+        int endCol = Integer.parseInt(end.substring(1));
+
+        int minRow = Math.min(startRow, endRow);
+        int maxRow = Math.max(startRow, endRow);
+        int minCol = Math.min(startCol, endCol);
+        int maxCol = Math.max(startCol, endCol);
 
         for (int row = minRow - 1; row <= maxRow + 1; row++) {
-            for (char col = (char) (minCol - 1); col <= (char) (maxCol + 1); col++) {
-                String coordinate = col + "" + row;
+            if (row < 1 || row > 10) continue;
+            for (int col = minCol - 1; col <= maxCol + 1; col++) {
+                if (col < 1 || col > 10) continue;
+                String coordinate = aToJ.charAt(row - 1) + "" + col;
                 if (field.containsKey(coordinate) && field.get(coordinate) == 1) {
-                    return true;
+                    if (!getCoordinatesBetween(start, end).contains(coordinate)) {
+                        return true;
+                    }
                 }
             }
         }
-
         return false;
     }
 
     private static void placeShip(String start, String end) {
-        char startCol = start.charAt(0);
-        int startRow = Integer.parseInt(start.substring(1));
-        char endCol = end.charAt(0);
-        int endRow = Integer.parseInt(end.substring(1));
+        char startRowChar = Character.toUpperCase(start.charAt(0));
+        int startRow = getRowIndex(startRowChar);
+        int startCol = Integer.parseInt(start.substring(1));
+
+        char endRowChar = Character.toUpperCase(end.charAt(0));
+        int endRow = getRowIndex(endRowChar);
+        int endCol = Integer.parseInt(end.substring(1));
 
         int minRow = Math.min(startRow, endRow);
         int maxRow = Math.max(startRow, endRow);
-        char minCol = (char) Math.min(startCol, endCol);
-        char maxCol = (char) Math.max(startCol, endCol);
+        int minCol = Math.min(startCol, endCol);
+        int maxCol = Math.max(startCol, endCol);
 
-        if (startCol == endCol) {
-            for (int row = minRow; row <= maxRow; row++) {
-                String coordinate = startCol + "" + row;
+        if (startRow == endRow) {
+            // Horizontal ship
+            for (int col = minCol; col <= maxCol; col++) {
+                String coordinate = startRowChar + "" + col;
                 field.put(coordinate, 1);
-                System.out.println("Row: " + row + " and Col: " + aToJ.indexOf(startCol) + 1);
-                board[row][aToJ.indexOf(startCol) + 1] = SHIP_CELL + " ";
+                board[startRow][col] = SHIP_CELL + " ";
             }
         } else {
-            for (char col = minCol; col <= maxCol; col++) {
-                String coordinate = col + "" + startRow;
+            // Vertical ship
+            for (int row = minRow; row <= maxRow; row++) {
+                String coordinate = aToJ.charAt(row - 1) + "" + startCol;
                 field.put(coordinate, 1);
-                board[startRow][aToJ.indexOf(col) + 1] = SHIP_CELL + " ";
+                board[row][startCol] = SHIP_CELL + " ";
             }
         }
     }
+
     private static boolean isInvalidCoordinate(String coordinate) {
-        return !field.containsKey(coordinate);
+        if (coordinate.length() < 2) {
+            return true;
+        }
+        char rowChar = Character.toUpperCase(coordinate.charAt(0));
+        if (aToJ.indexOf(rowChar) == -1) {
+            return true;
+        }
+        String colStr = coordinate.substring(1);
+        int col;
+        try {
+            col = Integer.parseInt(colStr);
+        } catch (NumberFormatException e) {
+            return true;
+        }
+        return col < 1 || col > 10;
     }
 
     private static void createField() {
-        for (int i = 1; i < BOARD_SIZE; i++) {
-            for (int j = 1; j < BOARD_SIZE; j++) {
-                field.put(aToJ.toCharArray()[j-1] + "" + i, 0);
+        for (int i = 0; i < aToJ.length(); i++) {
+            for (int j = 1; j <= 10; j++) {
+                String coordinate = aToJ.charAt(i) + "" + j;
+                field.put(coordinate, 0);
             }
         }
-        System.out.println(field);
     }
 
     private static void createBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            if (i == 0) {
-                board[0][i] = "  ";
-            } else {
-                board[0][i] = i + " ";
-            }
+        board[0][0] = "  ";
+        for (int j = 1; j < BOARD_SIZE; j++) {
+            board[0][j] = j + " ";
+        }
+        for (int i = 1; i < BOARD_SIZE; i++) {
+            board[i][0] = aToJ.charAt(i - 1) + " ";
             for (int j = 1; j < BOARD_SIZE; j++) {
-                if (i == 0) {
-                    board[j][0] = aToJ.toCharArray()[j-1] + " ";
-                } else {
-                    board[i][j] = EMPTY_CELL + " ";
-                }
+                board[i][j] = EMPTY_CELL + " ";
             }
         }
     }
@@ -169,18 +238,14 @@ public class Main {
     private static void printBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (i == 0 && j == 0) {
-                    System.out.print("  ");
-                } else if (i == 0) {
-                    System.out.print(j + " ");
-                } else if (j == 0) {
-                    System.out.print(aToJ.charAt(i - 1) + " ");
-                } else {
-                    System.out.print(board[i][j]);
-                }
+                System.out.print(board[i][j]);
             }
             System.out.println();
         }
         System.out.println();
+    }
+
+    private static int getRowIndex(char rowChar) {
+        return aToJ.indexOf(rowChar) + 1;
     }
 }

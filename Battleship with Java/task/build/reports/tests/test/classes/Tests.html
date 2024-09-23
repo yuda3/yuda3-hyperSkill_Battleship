@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.225s</div>
+<div class="counter">0.416s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">0%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,108 +61,13 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
-</li>
-<li>
-<a href="#tab2">Standard output</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="start"></a>
-<h3 class="failures">start</h3>
-<span class="code">
-<pre>java.lang.AssertionError: Wrong answer in test #1
-
-The ship's cells were not found at the coordinates &quot;F3 F7&quot;
-
-Please find below the output of your program during this failed test.
-Note that the '&gt;' character indicates the beginning of the input line.
-
----
-
-{A1=0, B1=0, C1=0, D1=0, E1=0, F1=0, G1=0, H1=0, I1=0, J1=0, A2=0, B2=0, C2=0, D2=0, E2=0, F2=0, G2=0, H2=0, I2=0, J2=0, A3=0, B3=0, C3=0, D3=0, E3=0, F3=0, G3=0, H3=0, I3=0, J3=0, A4=0, B4=0, C4=0, D4=0, E4=0, F4=0, G4=0, H4=0, I4=0, J4=0, A5=0, B5=0, C5=0, D5=0, E5=0, F5=0, G5=0, H5=0, I5=0, J5=0, A6=0, B6=0, C6=0, D6=0, E6=0, F6=0, G6=0, H6=0, I6=0, J6=0, A7=0, B7=0, C7=0, D7=0, E7=0, F7=0, G7=0, H7=0, I7=0, J7=0, A8=0, B8=0, C8=0, D8=0, E8=0, F8=0, G8=0, H8=0, I8=0, J8=0, A9=0, B9=0, C9=0, D9=0, E9=0, F9=0, G9=0, H9=0, I9=0, J9=0, A10=0, B10=0, C10=0, D10=0, E10=0, F10=0, G10=0, H10=0, I10=0, J10=0}
-  1 2 3 4 5 6 7 8 9 10 
-A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-
-Enter the coordinates of the Aircraft Carrier (5 cells):
-&gt; F3 F7
-  1 2 3 4 5 6 7 8 9 10 
-A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-C ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-D ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-E ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-F ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-G ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-
-Enter the coordinates of the Battleship (4 cells):
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.hyperskill.hstest.stage.StageTest.start(StageTest.java:203)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
-	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
-	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
-	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
-	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
-	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.runTestClass(JUnitTestClassExecutor.java:108)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:57)
-	at org.gradle.api.internal.tasks.testing.junit.JUnitTestClassExecutor.execute(JUnitTestClassExecutor.java:39)
-	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestClassProcessor.processTestClass(AbstractJUnitTestClassProcessor.java:62)
-	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.processTestClass(SuiteTestClassProcessor.java:52)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
-	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
-	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
-	at jdk.proxy1/jdk.proxy1.$Proxy2.processTestClass(Unknown Source)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker$2.run(TestWorker.java:176)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
-	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
-	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
-	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
-	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
-	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
-	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-</pre>
-</span>
-</div>
-</div>
-<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -173,18 +78,17 @@ Enter the coordinates of the Battleship (4 cells):
 </tr>
 </thead>
 <tr>
-<td class="failures">start</td>
-<td class="failures">0.225s</td>
-<td class="failures">failed</td>
+<td class="success">start</td>
+<td class="success">0.416s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
-<div id="tab2" class="tab">
+<div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
 <pre>?[1;31m
 Start test 1?[0m
-{A1=0, B1=0, C1=0, D1=0, E1=0, F1=0, G1=0, H1=0, I1=0, J1=0, A2=0, B2=0, C2=0, D2=0, E2=0, F2=0, G2=0, H2=0, I2=0, J2=0, A3=0, B3=0, C3=0, D3=0, E3=0, F3=0, G3=0, H3=0, I3=0, J3=0, A4=0, B4=0, C4=0, D4=0, E4=0, F4=0, G4=0, H4=0, I4=0, J4=0, A5=0, B5=0, C5=0, D5=0, E5=0, F5=0, G5=0, H5=0, I5=0, J5=0, A6=0, B6=0, C6=0, D6=0, E6=0, F6=0, G6=0, H6=0, I6=0, J6=0, A7=0, B7=0, C7=0, D7=0, E7=0, F7=0, G7=0, H7=0, I7=0, J7=0, A8=0, B8=0, C8=0, D8=0, E8=0, F8=0, G8=0, H8=0, I8=0, J8=0, A9=0, B9=0, C9=0, D9=0, E9=0, F9=0, G9=0, H9=0, I9=0, J9=0, A10=0, B10=0, C10=0, D10=0, E10=0, F10=0, G10=0, H10=0, I10=0, J10=0}
   1 2 3 4 5 6 7 8 9 10 
 A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
@@ -202,16 +106,175 @@ Enter the coordinates of the Aircraft Carrier (5 cells):
   1 2 3 4 5 6 7 8 9 10 
 A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-C ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-D ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-E ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-F ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
-G ~ ~ ~ ~ ~ O ~ ~ ~ ~ 
+C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ O O O O O ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
 
 Enter the coordinates of the Battleship (4 cells):
+&gt; A1 D1
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+D O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ O O O O O ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+Enter the coordinates of the Submarine (3 cells):
+&gt; J7 J10
+Error: Wrong length of the Submarine. Try again:
+Enter the coordinates of the Submarine (3 cells):
+&gt; J10 J8
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+D O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ O O O O O ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ ~ ~ ~ ~ ~ O O O 
+
+Enter the coordinates of the Cruiser (3 cells):
+&gt; B9 D8
+Error: Wrong ship location! Try again:
+Error: Wrong length of the Cruiser. Try again:
+Enter the coordinates of the Cruiser (3 cells):
+&gt; B9 D9
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ O ~ 
+C O ~ ~ ~ ~ ~ ~ ~ O ~ 
+D O ~ ~ ~ ~ ~ ~ ~ O ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ O O O O O ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ ~ ~ ~ ~ ~ O O O 
+
+Enter the coordinates of the Destroyer (2 cells):
+&gt; E6 D6
+Error: You placed it too close to another one. Try again:
+Enter the coordinates of the Destroyer (2 cells):
+&gt; I2 J2
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ O ~ 
+C O ~ ~ ~ ~ ~ ~ ~ O ~ 
+D O ~ ~ ~ ~ ~ ~ ~ O ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ O O O O O ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ O ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ O ~ ~ ~ ~ ~ O O O 
+
+?[1;31m
+Start test 2?[0m
+  1 2 3 4 5 6 7 8 9 10 
+A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+Enter the coordinates of the Aircraft Carrier (5 cells):
+&gt; J3 J7
+  1 2 3 4 5 6 7 8 9 10 
+A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ O O O O O ~ ~ ~ 
+
+Enter the coordinates of the Battleship (4 cells):
+&gt; C8 B8
+Error: Wrong length of the Battleship. Try again:
+Enter the coordinates of the Battleship (4 cells):
+&gt; C8 F8
+  1 2 3 4 5 6 7 8 9 10 
+A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ O O O O O ~ ~ ~ 
+
+Enter the coordinates of the Submarine (3 cells):
+&gt; A1 C2
+Error: Wrong ship location! Try again:
+Error: Wrong length of the Submarine. Try again:
+Enter the coordinates of the Submarine (3 cells):
+&gt; A1 C1
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C O ~ ~ ~ ~ ~ ~ O ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ O O O O O ~ ~ ~ 
+
+Enter the coordinates of the Cruiser (3 cells):
+&gt; H1 H3
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+C O ~ ~ ~ ~ ~ ~ O ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H O O O ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ O O O O O ~ ~ ~ 
+
+Enter the coordinates of the Destroyer (2 cells):
+&gt; G2 E2
+Error: Wrong length of the Destroyer. Try again:
+Enter the coordinates of the Destroyer (2 cells):
+&gt; B5 C5
+  1 2 3 4 5 6 7 8 9 10 
+A O ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+B O ~ ~ ~ O ~ ~ ~ ~ ~ 
+C O ~ ~ ~ O ~ ~ O ~ ~ 
+D ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+E ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+F ~ ~ ~ ~ ~ ~ ~ O ~ ~ 
+G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+H O O O ~ ~ ~ ~ ~ ~ ~ 
+I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+J ~ ~ O O O O O ~ ~ ~ 
+
 </pre>
 </span>
 </div>
@@ -223,7 +286,7 @@ Enter the coordinates of the Battleship (4 cells):
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.6</a> at 2024/09/23 11:58:29</p>
+<a href="http://www.gradle.org">Gradle 7.6</a> at 2024/09/23 12:19:41</p>
 </div>
 </div>
 </body>
