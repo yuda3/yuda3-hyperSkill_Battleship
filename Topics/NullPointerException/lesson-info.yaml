@@ -1,0 +1,11 @@
+content:
+  - Theory
+  - Greeting ghosts and empty spaces
+  - Print string multiple times based on input
+  - Catching null pointer exception in code
+  - Code that throws an exception
+  - Return empty string when argument is null
+  - Lines that may throw NPE
+  - When NPE cannot occur
+  - Avoid NPE
+  - Avoid NPE with strings
