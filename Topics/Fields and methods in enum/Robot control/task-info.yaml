@@ -1,0 +1,16 @@
+type: code
+files:
+  - name: src/Main.java
+    visible: true
+    highlight_level: NONE
+    learner_created: false
+  - name: src/Animal.java
+    visible: true
+    learner_created: true
+feedback_link: https://hyperskill.org/learn/step/11522#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Mon, 23 Sep 2024 08:06:15 UTC"
+record: -1
+submission_language: java17

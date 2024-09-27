@@ -1,0 +1,13 @@
+type: code
+custom_name: "Vroom vroom: A tale of two wheels"
+files:
+  - name: src/Main.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/49090#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Wed, 25 Sep 2024 10:32:56 UTC"
+record: -1
+submission_language: java17

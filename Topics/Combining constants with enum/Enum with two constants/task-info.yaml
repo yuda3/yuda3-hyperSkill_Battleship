@@ -1,0 +1,23 @@
+type: choice
+is_multiple_choice: true
+options:
+  - text: 1
+  - text: 2
+  - text: 3
+  - text: 4
+  - text: The code won't compile.
+files:
+  - name: src/Task.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/11516#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Mon, 23 Sep 2024 07:39:37 UTC"
+record: -1
+selected_options:
+  - 0
+  - 1
+  - 2
+local_check: false

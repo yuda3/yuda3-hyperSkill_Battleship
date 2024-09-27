@@ -8,6 +8,8 @@ public class Main {
     private static final String[][] board = new String[BOARD_SIZE][BOARD_SIZE];
     private static final char EMPTY_CELL = '~';
     private static final char SHIP_CELL = 'O';
+    private static final char HIT_CELL = 'X';
+    private static final char MISS_CELL = 'M';
     private static final String aToJ = "ABCDEFGHIJ";
     private static final Map<String, Integer> field = new LinkedHashMap<>();
     private static final Map<String, Integer> ships = new LinkedHashMap<>();
@@ -30,7 +32,56 @@ public class Main {
                 }
             }
         }
+
+        System.out.println("The game starts!");
+        printBoard();
+
+        boolean validShot = false;
+        while (!validShot) {
+            System.out.println("Take a shot!");
+            String shot = scanner.nextLine().toUpperCase();
+            if (isValidCoordinate(shot)) {
+                boolean isHit = takeShot(shot);
+                printBoard();
+                System.out.println(isHit ? "You hit a ship!" : "You missed!");
+                validShot = true;
+            } else {
+                System.out.println("Error: You entered the wrong coordinates. Try again:");
+            }
+        }
     }
+
+    private static boolean takeShot(String shot) {
+        int row = getRowIndex(shot.charAt(0));
+        int col = Integer.parseInt(shot.substring(1));
+
+        if (board[row][col].trim().equals(String.valueOf(SHIP_CELL))) {
+            board[row][col] = HIT_CELL + " ";
+            return true;
+        } else {
+            board[row][col] = MISS_CELL + " ";
+            return false;
+        }
+    }
+
+    private static boolean isValidCoordinate(String coordinate) {
+        if (coordinate.length() < 2 || coordinate.length() > 3) {
+            return false;
+        }
+        char rowChar = Character.toUpperCase(coordinate.charAt(0));
+        if (aToJ.indexOf(rowChar) == -1) {
+            return false;
+        }
+        String colStr = coordinate.substring(1);
+        int col;
+        try {
+            col = Integer.parseInt(colStr);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return col >= 1 && col <= 10;
+    }
+
 
     private static void initializeShips() {
         ships.put("Aircraft Carrier", 5);

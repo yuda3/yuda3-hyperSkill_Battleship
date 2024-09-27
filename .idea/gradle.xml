@@ -17,6 +17,33 @@
             <option value="$PROJECT_DIR$/Battleship with Java/task/build/reports/tests" />
             <option value="$PROJECT_DIR$/Battleship with Java/task/build/test-results" />
             <option value="$PROJECT_DIR$/Battleship with Java/task/build/tmp" />
+            <option value="$PROJECT_DIR$/Battleship with Java/task/out" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/About abstract classes" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/Correct statements" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/IntBinaryOperation" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/Parts of an abstract class" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/Shaping up  A polymorphic parade" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Abstract class/Users and WebSites" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Currencies" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Days of week" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Enum with two constants" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Hidden enumeration" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Iterating over enum values" />
+            <option value="$PROJECT_DIR$/Topics/Combining constants with enum/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Debugging techniques/Find the error" />
+            <option value="$PROJECT_DIR$/Topics/Debugging techniques/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Fields and methods in enum/Danger levels" />
+            <option value="$PROJECT_DIR$/Topics/Fields and methods in enum/Robot control" />
+            <option value="$PROJECT_DIR$/Topics/Fields and methods in enum/System of units" />
+            <option value="$PROJECT_DIR$/Topics/Fields and methods in enum/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Animal sounds  Cat meows, Dog woofs" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Saying animals" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Shapes area" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Vroom vroom  A tale of two wheels" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Which methods cannot be overridden" />
+            <option value="$PROJECT_DIR$/Topics/Method overriding/Which methods will be overridden" />
             <option value="$PROJECT_DIR$/Topics/NullPointerException/Avoid NPE" />
             <option value="$PROJECT_DIR$/Topics/NullPointerException/Avoid NPE with strings" />
             <option value="$PROJECT_DIR$/Topics/NullPointerException/Code that throws an exception" />
@@ -25,6 +52,11 @@
             <option value="$PROJECT_DIR$/Topics/NullPointerException/Return empty string when argument is null" />
             <option value="$PROJECT_DIR$/Topics/NullPointerException/Theory" />
             <option value="$PROJECT_DIR$/Topics/NullPointerException/When NPE cannot occur" />
+            <option value="$PROJECT_DIR$/Topics/Polymorphism/Notification" />
+            <option value="$PROJECT_DIR$/Topics/Polymorphism/Publication and its subclasses" />
+            <option value="$PROJECT_DIR$/Topics/Polymorphism/Runtime method resolution" />
+            <option value="$PROJECT_DIR$/Topics/Polymorphism/The time of overloading" />
+            <option value="$PROJECT_DIR$/Topics/Polymorphism/Theory" />
             <option value="$PROJECT_DIR$/util" />
           </set>
         </option>

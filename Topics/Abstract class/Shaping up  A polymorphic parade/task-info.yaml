@@ -1,0 +1,10 @@
+type: code
+custom_name: "Shaping up: A polymorphic parade"
+files:
+  - name: src/Main.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/49092#comment
+status: Unchecked
+record: -1
+submission_language: java17

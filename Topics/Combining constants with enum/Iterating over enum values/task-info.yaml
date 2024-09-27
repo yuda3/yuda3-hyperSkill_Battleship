@@ -1,0 +1,17 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: Use a for loop and iterate over the names of the enum values
+  - text: Use the enums() method to get a list of all the enum values and iterate over
+      it
+  - text: Use a for loop and iterate over the ordinal values of the enum
+  - text: Use the values() method to get an array of all the enum values and iterate
+      over it
+files:
+  - name: src/Task.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/27290#comment
+status: Solved
+record: -1
+local_check: false

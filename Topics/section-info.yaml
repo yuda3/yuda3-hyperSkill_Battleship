@@ -1,2 +1,8 @@
 content:
   - NullPointerException
+  - Debugging techniques
+  - Combining constants with enum
+  - Fields and methods in enum
+  - Method overriding
+  - Polymorphism
+  - Abstract class
