@@ -2,301 +2,583 @@ package battleship;
 
 import java.util.*;
 
-public class Main {
+class Player {
+    String name;
+    Board board;
+    SpecificShip[] ships;
 
-    private static final int BOARD_SIZE = 11;
-    private static final String[][] board = new String[BOARD_SIZE][BOARD_SIZE];
-    private static final char EMPTY_CELL = '~';
-    private static final char SHIP_CELL = 'O';
-    private static final char HIT_CELL = 'X';
-    private static final char MISS_CELL = 'M';
-    private static final String aToJ = "ABCDEFGHIJ";
-    private static final Map<String, Integer> field = new LinkedHashMap<>();
-    private static final Map<String, Integer> ships = new LinkedHashMap<>();
-    private static final Scanner scanner = new Scanner(System.in);
+    public Player(String name) {
+        this.name = name;
+        this.board = new Board();
+        this.ships = new SpecificShip[5];
+    }
 
-    public static void main(String[] args) {
-        createBoard();
-        createField();
-        initializeShips();
-        printBoard();
+    public void placeShips() {
+        System.out.println(name + ", place your ships on the game field");
+        board.initializeBoard(); // Reset the board before placing ships
+        board.printBoard("main");
 
-        for (Map.Entry<String, Integer> ship : ships.entrySet()) {
-            boolean isPlaced = false;
-            while (!isPlaced) {
-                System.out.printf("Enter the coordinates of the %s (%d cells):%n", ship.getKey(), ship.getValue());
-                String input = scanner.nextLine();
-                if (checkAndPlaceShip(input, ship.getKey(), ship.getValue())) {
-                    isPlaced = true;
-                    printBoard();
+        ships[0] = new SpecificShip("Aircraft Carrier", 5, this.board);
+        ships[1] = new SpecificShip("Battleship", 4, this.board);
+        ships[2] = new SpecificShip("Submarine", 3, this.board);
+        ships[3] = new SpecificShip("Cruiser", 3, this.board);
+        ships[4] = new SpecificShip("Destroyer", 2, this.board);
+
+        System.out.println("Press Enter and pass the move to another player");
+        new Scanner(System.in).nextLine();
+    }
+}
+class Board {
+    private static final int boardSize = 11;
+    public String[][] boardVisual = new String[boardSize][boardSize];
+    public String[][] boardMain = new String[boardSize][boardSize];
+    public final String[][] boardCoords = new String[boardSize][boardSize];
+
+    public Board(){
+        initializeBoard();
+    }
+
+    public void initializeBoard() {
+        boardVisual[0][0] = " ";
+        boardMain[0][0] = " ";
+        boardCoords[0][0] = " ";
+
+        List<String> capitalAlphabet = misc.capitalAlphabet();
+        for (int i = 1; i < boardSize; i++) {
+            boardCoords[i][0] = capitalAlphabet.get(i-1);
+            boardMain[i][0] = capitalAlphabet.get(i -1);
+            boardVisual[i][0] = capitalAlphabet.get(i -1);
+        }
+        for (int i = 1; i < boardSize; i++) {
+            boardCoords[0][i] = i + " ";
+            boardMain[0][i] = Integer.toString(i);
+            boardVisual[0][i] = Integer.toString(i);
+        }
+        for (int i = 1; i < boardSize; i++) {
+            for (int j = 1; j < boardSize; j++) {
+                boardMain[i][j] = "~";
+                boardVisual[i][j] = "~";
+                boardCoords[i][j] = boardCoords[i][0] + j;
+            }
+        }
+    }
+
+    public void printBoard(String layer) {
+        if (Objects.equals(layer, "visual")) {
+            misc.printArray(boardVisual);
+        } else if (Objects.equals(layer, "main")) {
+            misc.printArray(boardMain);
+        } else if (Objects.equals(layer, "coords")) {
+            misc.printArray(boardCoords);
+        }
+    }
+
+    public boolean searchBoardCoords(String input) {
+        for (int i = 1; i < boardSize; i++) {
+            for (int j = 1; j < boardSize; j++) {
+                if (input.equals(boardCoords[i][j])) {
+                    return true;
                 }
-            }
-        }
-
-        System.out.println("The game starts!");
-        printBoard();
-
-        boolean validShot = false;
-        while (!validShot) {
-            System.out.println("Take a shot!");
-            String shot = scanner.nextLine().toUpperCase();
-            if (isValidCoordinate(shot)) {
-                boolean isHit = takeShot(shot);
-                printBoard();
-                System.out.println(isHit ? "You hit a ship!" : "You missed!");
-                validShot = true;
-            } else {
-                System.out.println("Error: You entered the wrong coordinates. Try again:");
-            }
-        }
-    }
-
-    private static boolean takeShot(String shot) {
-        int row = getRowIndex(shot.charAt(0));
-        int col = Integer.parseInt(shot.substring(1));
-
-        if (board[row][col].trim().equals(String.valueOf(SHIP_CELL))) {
-            board[row][col] = HIT_CELL + " ";
-            return true;
-        } else {
-            board[row][col] = MISS_CELL + " ";
-            return false;
-        }
-    }
-
-    private static boolean isValidCoordinate(String coordinate) {
-        if (coordinate.length() < 2 || coordinate.length() > 3) {
-            return false;
-        }
-        char rowChar = Character.toUpperCase(coordinate.charAt(0));
-        if (aToJ.indexOf(rowChar) == -1) {
-            return false;
-        }
-        String colStr = coordinate.substring(1);
-        int col;
-        try {
-            col = Integer.parseInt(colStr);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return col >= 1 && col <= 10;
-    }
-
-
-    private static void initializeShips() {
-        ships.put("Aircraft Carrier", 5);
-        ships.put("Battleship", 4);
-        ships.put("Submarine", 3);
-        ships.put("Cruiser", 3);
-        ships.put("Destroyer", 2);
-    }
-
-    private static boolean checkAndPlaceShip(String placedShip, String shipType, int shipLength) {
-        String[] coordinates = placedShip.toUpperCase().split(" ");
-
-        if (coordinates.length != 2) {
-            System.out.println("Error: Invalid input. Please enter two coordinates.");
-            return false;
-        }
-
-        String start = coordinates[0];
-        String end = coordinates[1];
-
-        if (isInvalidCoordinate(start) || isInvalidCoordinate(end)) {
-            System.out.println("Error: Invalid coordinates. Please enter coordinates within the game field.");
-            return false;
-        }
-
-        if (!isValidShipPlacement(start, end, shipLength)) {
-            System.out.println("Error: Wrong length of the " + shipType + ". Try again:");
-            return false;
-        }
-
-        if (isOverlapping(start, end)) {
-            return false;
-        }
-
-        if (isAdjacentToAnotherShip(start, end)) {
-            System.out.println("Error: You placed it too close to another one. Try again:");
-            return false;
-        }
-
-        placeShip(start, end);
-        return true;
-    }
-
-    private static boolean isValidShipPlacement(String start, String end, int shipLength) {
-        char startRowChar = Character.toUpperCase(start.charAt(0));
-        int startRow = getRowIndex(startRowChar);
-        int startCol = Integer.parseInt(start.substring(1));
-
-        char endRowChar = Character.toUpperCase(end.charAt(0));
-        int endRow = getRowIndex(endRowChar);
-        int endCol = Integer.parseInt(end.substring(1));
-
-        if (startRow == endRow) {
-            return Math.abs(endCol - startCol) + 1 == shipLength;
-        } else if (startCol == endCol) {
-            return Math.abs(endRow - startRow) + 1 == shipLength;
-        } else {
-            System.out.println("Error: Wrong ship location! Try again:");
-            return false;
-        }
-    }
-
-    private static boolean isOverlapping(String start, String end) {
-        List<String> coordinates = getCoordinatesBetween(start, end);
-        for (String coordinate : coordinates) {
-            if (field.get(coordinate) == 1) {
-                System.out.println("Error: You placed it on another ship. Try again:");
-                return true;
             }
         }
         return false;
     }
+    public static boolean outOfBounds(int coord) {
+        return !(coord < 11);
+    }
+}
 
-    private static List<String> getCoordinatesBetween(String start, String end) {
-        List<String> coordinates = new ArrayList<>();
-        char startRowChar = Character.toUpperCase(start.charAt(0));
-        int startRow = getRowIndex(startRowChar);
-        int startCol = Integer.parseInt(start.substring(1));
+class Ship {
+    protected String start;
+    protected String end;
+    protected String[] placement;
+    protected int[][] placementCoord;
+    protected int fields;
+    protected int maxLength;
+    protected String shipName;
+    protected String textInit;
+    protected Board playerBoard;
 
-        char endRowChar = Character.toUpperCase(end.charAt(0));
-        int endRow = getRowIndex(endRowChar);
-        int endCol = Integer.parseInt(end.substring(1));
-
-        int minRow = Math.min(startRow, endRow);
-        int maxRow = Math.max(startRow, endRow);
-        int minCol = Math.min(startCol, endCol);
-        int maxCol = Math.max(startCol, endCol);
-
-        if (startRow == endRow) {
-            // Horizontal ship
-            for (int col = minCol; col <= maxCol; col++) {
-                String coordinate = startRowChar + "" + col;
-                coordinates.add(coordinate);
+    protected Ship(String shipName, int maxLength, Board playerBoard) {
+        this.shipName = shipName;
+        this.maxLength = maxLength;
+        this.fields = maxLength;
+        this.textInit = String.format("%s (%d cells)", shipName, maxLength);
+        this.playerBoard = playerBoard; // Add this line
+        System.out.printf("Enter the coordinates of the %s:%n", textInit);
+        boolean idx = false;
+        while (!idx) {
+            Scanner sc = new Scanner(System.in);
+            String[] input = sc.nextLine().split(" ");
+            start = input[0];
+            end = input[1];
+            idx = shipPlacement(start, end);
+        }
+    }
+    protected boolean shipPlacement(String start, String end) {
+        if (!(shipOnBoard(start, end))) {
+            System.out.println("Error!");
+            return false;
+        } else if (
+                shipValidHorizontal(start, end) && shipValidHorizontalLength(start, end)
+        ) {
+            String[] placement = new String[Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) + 1];
+            if ((Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) + 1) != maxLength){
+                System.out.printf("Error! Wrong length of the %s! Try again:%n", textInit);
             }
+
+            String[] splitStart = start.split("");
+            String[] splitEnd = end.split("");
+            if (misc.realCoords(start)[1] < misc.realCoords(end)[1]){
+                for (int i = 0; i < placement.length; i++) {
+                    placement[i] = splitStart[0] + (misc.realCoords(start)[1] + i);
+                }
+            } else if (misc.realCoords(start)[1] > misc.realCoords(end)[1]){
+                for (int i = placement.length; i > 0; i--) {
+                    placement[i-1] = splitEnd[0] + (misc.realCoords(end)[1] + i - 1);
+                }
+            }
+            setPlacement(placement);
+            setFields(Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) + 1);
+            setStart(start);
+            setEnd(end);
+            placementCoord = new int[this.getLength()][2];
+            for (int i = 0; i < placement.length; i++) {
+                placementCoord[i] = misc.realCoords(placement[i]);
+            }
+            if (shipClose(placementCoord, start, end)) {
+                System.out.println("Length: " + (Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) + 1));
+                System.out.print("Parts:");
+                if (misc.realCoords(start)[1] < misc.realCoords(end)[1]){
+                    for (String s : placement) {
+                        System.out.print(" " + s);
+                    }
+                    System.out.printf("%n");
+                } else if (misc.realCoords(start)[1] > misc.realCoords(end)[1]){
+                    for (int i = placement.length; i > 0; i--) {
+                        System.out.print(" " + placement[i-1]);
+                    }
+                }
+            } else {
+                System.out.println("Error! You placed it too close to another one. Try again:");
+                return false;
+            }
+        } else if (
+                shipValidVertical(start, end) && shipValidVerticalLength(start, end)
+        ) {
+            String[] placement = new String[Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) + 1];
+            String[] splitStart = start.split("");
+            String[] splitEnd = end.split("");
+            if (misc.realCoords(start)[0] < misc.realCoords(end)[0]){
+                for (int i = 0; i < placement.length; i++) {
+                    placement[i] = misc.capitalAlphabet().get(misc.realCoords(start)[0] - 1 + i) + misc.realCoords(start)[1];
+                }
+            } else if (misc.realCoords(start)[0] > misc.realCoords(end)[0]){
+                for (int i = placement.length; i > 0; i--) {
+                    placement[i - 1] = misc.capitalAlphabet().get(misc.realCoords(end)[0] - 2 + i) + misc.realCoords(start)[1];
+                }
+            }
+            setPlacement(placement);
+            setFields(Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) + 1);
+            setStart(start);
+            setEnd(end);
+
+            placementCoord = new int[placement.length][2];
+            for (int i = 0; i < placement.length; i++) {
+                placementCoord[i] = misc.realCoords(placement[i]);
+            }
+            if (shipClose(placementCoord, start, end)) {
+                System.out.println("Length: " + (Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) + 1));
+                System.out.print("Parts:");
+                if (misc.realCoords(start)[0] < misc.realCoords(end)[0]){
+                    for (String s : placement) {
+                        System.out.print(" " + s);
+                    }
+                } else if (misc.realCoords(start)[0] > misc.realCoords(end)[0]){
+                    for (int i = placement.length; i > 0; i--) {
+                        System.out.print(" " + placement[i - 1]);
+                    }
+                }
+            } else {
+                System.out.println("Error! You placed it too close to another one. Try again:");
+                return false;
+            }
+
+        } else if (!(shipValidVerticalLength(start, end) || shipValidHorizontalLength(start, end))) {
+            System.out.printf("Error! Wrong length of %s! Try again:%n", textInit);
+            return false;
         } else {
-            // Vertical ship
-            for (int row = minRow; row <= maxRow; row++) {
-                String coordinate = aToJ.charAt(row - 1) + "" + startCol;
-                coordinates.add(coordinate);
+            System.out.println("Error! Wrong ship location! Try again:");
+            System.out.println("Something in shipPlacement went wrong :(");
+            return false;
+        }
+        for (int i = 0; i < placement.length; i++) {
+            playerBoard.boardMain[placementCoord[i][0]][placementCoord[i][1]] = "O";
+        }
+        System.out.println();
+        playerBoard.printBoard("main");
+        return true;
+    }
+    public boolean isSunk(Board board) {
+        for (int[] coord : this.getPlacementCoord()) {
+            if (!board.boardMain[coord[0]][coord[1]].equals("X")) {
+                return false; // Found an unhit part of the ship
             }
         }
-        return coordinates;
+        return true; // All parts are hit
+    }
+    public void setPlacementCoord(int[][] placementCoord) {
+        this.placementCoord = placementCoord;
     }
 
-    private static boolean isAdjacentToAnotherShip(String start, String end) {
-        char startRowChar = Character.toUpperCase(start.charAt(0));
-        int startRow = getRowIndex(startRowChar);
-        int startCol = Integer.parseInt(start.substring(1));
+    public int[][] getPlacementCoord() {
+        return placementCoord;
+    }
 
-        char endRowChar = Character.toUpperCase(end.charAt(0));
-        int endRow = getRowIndex(endRowChar);
-        int endCol = Integer.parseInt(end.substring(1));
+    public void setStart(String start) {
+        this.start = start;
+    }
 
-        int minRow = Math.min(startRow, endRow);
-        int maxRow = Math.max(startRow, endRow);
-        int minCol = Math.min(startCol, endCol);
-        int maxCol = Math.max(startCol, endCol);
+    public void setEnd(String end) {
+        this.end = end;
+    }
 
-        for (int row = minRow - 1; row <= maxRow + 1; row++) {
-            if (row < 1 || row > 10) continue;
-            for (int col = minCol - 1; col <= maxCol + 1; col++) {
-                if (col < 1 || col > 10) continue;
-                String coordinate = aToJ.charAt(row - 1) + "" + col;
-                if (field.containsKey(coordinate) && field.get(coordinate) == 1) {
-                    if (!getCoordinatesBetween(start, end).contains(coordinate)) {
-                        return true;
+    public void setPlacement(String[] placement) {
+        this.placement = placement;
+    }
+
+    public void setFields(int fields) {
+        this.fields = fields;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public String[] getPlacement() {
+        return placement;
+    }
+
+    public int getLength() {
+        return fields;
+    }
+
+    protected boolean checkBoard () {
+        return Objects.equals(playerBoard.boardMain[1][1], "O");
+    }
+
+    protected boolean shipClose(int[][] placementCoord, String start, String end) {
+        int blocked = 0;
+        if (shipValidHorizontal(start, end)){
+            for (int[] ints : placementCoord) {
+                if (!(Board.outOfBounds(ints[0] - 1) || Board.outOfBounds(ints[1]))) {
+                    blocked += Objects.equals(playerBoard.boardMain[ints[0] - 1][ints[1]], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(ints[0] + 1) || Board.outOfBounds(ints[1]))) {
+                    blocked += Objects.equals(playerBoard.boardMain[ints[0] + 1][ints[1]], "O") ? 1 : 0;
+                }
+                blocked += Objects.equals(playerBoard.boardMain[ints[0]][ints[1]], "O") ? 1 : 0;
+            }
+            if (
+                    placementCoord[0][1] > placementCoord[placementCoord.length-1][1]
+            ) {
+                if (!(Board.outOfBounds(placementCoord[0][0]) || Board.outOfBounds(placementCoord[0][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0]][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] - 1) || Board.outOfBounds(placementCoord[0][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0]) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0]][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] - 1) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+            } else if (
+                    placementCoord[0][1] < placementCoord[placementCoord.length-1][1]
+            ) {
+                if (!(Board.outOfBounds(placementCoord[0][0]) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0]][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] - 1) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length-1][0]) || Board.outOfBounds(placementCoord[placementCoord.length-1][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length-1][0]][placementCoord[placementCoord.length-1][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length-1][0] - 1) || Board.outOfBounds(placementCoord[placementCoord.length-1][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length-1][0] - 1][placementCoord[placementCoord.length-1][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length-1][0] + 1) || Board.outOfBounds(placementCoord[placementCoord.length-1][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length-1][0] + 1][placementCoord[placementCoord.length-1][1] - 1], "O") ? 1 : 0;
+                }
+            }
+        } else if (shipValidVertical(start, end)) {
+            for (int[] ints : placementCoord) {
+                blocked += Objects.equals(playerBoard.boardMain[ints[0]][ints[1]], "O") ? 1 : 0;
+                if (!(Board.outOfBounds(ints[0]) || Board.outOfBounds(ints[1] - 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[ints[0]][ints[1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(ints[0]) || Board.outOfBounds(ints[1] + 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[ints[0]][ints[1] + 1], "O") ? 1 : 0;
+                }
+            }
+            if (
+                    placementCoord[0][0] > placementCoord[placementCoord.length-1][0]
+            ) {
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1]))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1]], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] + 1) || Board.outOfBounds(placementCoord[0][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] + 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length - 1][0] - 1) || Board.outOfBounds(placementCoord[placementCoord.length - 1][1]))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length - 1][0] - 1][placementCoord[placementCoord.length - 1][1]], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length - 1][0] - 1) || Board.outOfBounds(placementCoord[placementCoord.length - 1][1] - 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length - 1][0] - 1][placementCoord[placementCoord.length - 1][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length - 1][0] - 1) || Board.outOfBounds(placementCoord[placementCoord.length - 1][1] + 1))){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length - 1][0] - 1][placementCoord[placementCoord.length - 1][1] + 1], "O") ? 1 : 0;
+                }
+            } else if (
+                    placementCoord[0][0] < placementCoord[placementCoord.length-1][0]
+            ) {
+                if (!Board.outOfBounds(placementCoord[0][0] - 1)){
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1]], "O") ? 1 : 0;
+                }
+
+                if (!(Board.outOfBounds(placementCoord[0][0] - 1) || Board.outOfBounds(placementCoord[0][1] + 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[0][0] - 1) || Board.outOfBounds(placementCoord[0][1] - 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[0][0] - 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length-1][0] + 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length-1][0] + 1][placementCoord[0][1]], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length-1][0] + 1) || Board.outOfBounds(placementCoord[0][1] + 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length-1][0] + 1][placementCoord[0][1] + 1], "O") ? 1 : 0;
+                }
+                if (!(Board.outOfBounds(placementCoord[placementCoord.length - 1][0] + 1) || Board.outOfBounds(placementCoord[0][1] - 1))) {
+                    blocked += Objects.equals(playerBoard.boardMain[placementCoord[placementCoord.length - 1][0] + 1][placementCoord[0][1] - 1], "O") ? 1 : 0;
+                }
+            }
+        }
+        return blocked <= 0;
+    }
+    protected boolean shipOnBoard(String start, String end) {
+        return playerBoard.searchBoardCoords(start) && playerBoard.searchBoardCoords(end);
+    }
+    protected boolean shipValidHorizontalLength (String start, String end) {
+        return (Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) < 5)
+                && (Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) > 0);
+    }
+    protected boolean shipValidVerticalLength (String start, String end) {
+        return (Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) < 5)
+                && (Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) > 0);
+    }
+    protected boolean shipValidHorizontal (String start, String end) {
+        return (misc.realCoords(start)[0] == misc.realCoords(end)[0]);
+    }
+    protected boolean shipValidVertical (String start, String end) {
+        return (misc.realCoords(start)[1] == misc.realCoords(end)[1]);
+    }
+}
+
+class SpecificShip extends Ship {
+
+    protected SpecificShip(String shipName, int maxLength, Board playerBoard){
+        super(shipName, maxLength, playerBoard);
+    }
+    @Override
+    protected boolean shipValidHorizontalLength (String start, String end) {
+//        System.out.println("@Override shipValidHorizontalLength");
+//        System.out.println(Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]));
+//        System.out.println("maxLength = " + maxLength);
+        return (Math.abs(misc.realCoords(start)[1] - misc.realCoords(end)[1]) == maxLength - 1);
+    }
+
+    @Override
+    protected boolean shipValidVerticalLength (String start, String end) {
+//        System.out.println("@Override shipValidVerticalLength");
+//        System.out.println(Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]));
+//        System.out.println("maxLength = " + maxLength);
+        return (Math.abs(misc.realCoords(start)[0] - misc.realCoords(end)[0]) == maxLength - 1);
+    }
+
+    @Override
+    protected boolean shipValidHorizontal (String start, String end) {
+//        System.out.println("@Override shipValidHorizontal");
+        return (misc.realCoords(start)[0] == misc.realCoords(end)[0]);
+    }
+
+    @Override
+    protected boolean shipValidVertical (String start, String end) {
+//        System.out.println("@Override shipValidVertical");
+        return (misc.realCoords(start)[1] == misc.realCoords(end)[1]);
+    }
+}
+
+class Shooting {
+    public static int shoot(Board board, String coord, SpecificShip[] ships) {
+        int[] realCoord = misc.realCoords(coord);
+        String currentCell = board.boardMain[realCoord[0]][realCoord[1]];
+
+        if (currentCell.equals("O") || currentCell.equals("X")) {
+            board.boardMain[realCoord[0]][realCoord[1]] = "X";
+            board.boardVisual[realCoord[0]][realCoord[1]] = "X";
+
+            // Now check if the ship is sunk
+            for (SpecificShip ship : ships) {
+                for (int[] cell : ship.getPlacementCoord()) {
+                    if (cell[0] == realCoord[0] && cell[1] == realCoord[1]) {
+                        // Found the ship that was hit
+                        if (ship.isSunk(board)) {
+                            return 2; // Ship is sunk
+                        } else {
+                            return 1; // Ship is hit but not sunk
+                        }
                     }
                 }
             }
-        }
-        return false;
-    }
-
-    private static void placeShip(String start, String end) {
-        char startRowChar = Character.toUpperCase(start.charAt(0));
-        int startRow = getRowIndex(startRowChar);
-        int startCol = Integer.parseInt(start.substring(1));
-
-        char endRowChar = Character.toUpperCase(end.charAt(0));
-        int endRow = getRowIndex(endRowChar);
-        int endCol = Integer.parseInt(end.substring(1));
-
-        int minRow = Math.min(startRow, endRow);
-        int maxRow = Math.max(startRow, endRow);
-        int minCol = Math.min(startCol, endCol);
-        int maxCol = Math.max(startCol, endCol);
-
-        if (startRow == endRow) {
-            // Horizontal ship
-            for (int col = minCol; col <= maxCol; col++) {
-                String coordinate = startRowChar + "" + col;
-                field.put(coordinate, 1);
-                board[startRow][col] = SHIP_CELL + " ";
-            }
+            return 1; // Default to hit if ship not found (shouldn't happen)
         } else {
-            // Vertical ship
-            for (int row = minRow; row <= maxRow; row++) {
-                String coordinate = aToJ.charAt(row - 1) + "" + startCol;
-                field.put(coordinate, 1);
-                board[row][startCol] = SHIP_CELL + " ";
+            board.boardMain[realCoord[0]][realCoord[1]] = "M";
+            board.boardVisual[realCoord[0]][realCoord[1]] = "M";
+            return 0; // Miss
+        }
+    }
+
+    public static boolean gameOver(Board board) {
+        for (int i = 1; i < board.boardMain.length; i++) {
+            for (int j = 1; j < board.boardMain.length; j++) {
+                if (board.boardMain[i][j].equals("O")) {
+                    return false;
+                }
             }
         }
+        return true;
+    }
+}
+
+class misc {
+    public static void printArray(String[][] array){
+        for (String[] strings : array) {
+            for (String string : strings) {
+                System.out.print(string + " ");
+            }
+            System.out.printf("%n");
+        }
     }
 
-    private static boolean isInvalidCoordinate(String coordinate) {
-        if (coordinate.length() < 2) {
-            return true;
+    public static List<String> capitalAlphabet() {
+        List<String> capitalAlphabet = new ArrayList<>();
+
+        for (char ch = 'A'; ch <= 'Z'; ch++) {
+            capitalAlphabet.add("" + ch);
         }
-        char rowChar = Character.toUpperCase(coordinate.charAt(0));
-        if (aToJ.indexOf(rowChar) == -1) {
-            return true;
-        }
-        String colStr = coordinate.substring(1);
-        int col;
-        try {
-            col = Integer.parseInt(colStr);
-        } catch (NumberFormatException e) {
-            return true;
-        }
-        return col < 1 || col > 10;
+        return capitalAlphabet;
     }
 
-    private static void createField() {
-        for (int i = 0; i < aToJ.length(); i++) {
-            for (int j = 1; j <= 10; j++) {
-                String coordinate = aToJ.charAt(i) + "" + j;
-                field.put(coordinate, 0);
+    public static int[] realCoords(String coords){
+        List<String> capitalAlphabet = capitalAlphabet();
+        String[] split = coords.split("");
+        if (split.length == 3) {
+            return new int[]{
+                    capitalAlphabet.indexOf(split[0]) + 1,
+                    Integer.parseInt(split[1]+split[2])
+            };
+        } else if (split.length == 2) {
+            return new int[]{
+                    capitalAlphabet.indexOf(split[0]) + 1,
+                    Integer.parseInt(split[1])
+            };
+        } else { return new int[]{0,0};}
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
+
+        player1.placeShips();
+        player2.placeShips();
+
+        boolean gameOver = false;
+        Player currentPlayer = player1;
+        Player otherPlayer = player2;
+
+        while (true) {
+            printGameState(currentPlayer, otherPlayer);
+            System.out.println(currentPlayer.name + ", it's your turn:");
+
+            String shotCoord = new Scanner(System.in).nextLine();
+            int result = Shooting.shoot(otherPlayer.board, shotCoord, otherPlayer.ships);
+
+            gameOver = Shooting.gameOver(otherPlayer.board);
+
+            if (gameOver) {
+                System.out.println("You sank the last ship. You won. Congratulations!");
+                break;
+            } else {
+                if (result == 2) {
+                    System.out.println("You sank a ship!");
+                } else if (result == 1) {
+                    System.out.println("You hit a ship!");
+                } else {
+                    System.out.println("You missed!");
+                }
+
+                System.out.println("Press Enter and pass the move to another player");
+                new Scanner(System.in).nextLine();
+
+                // Swap players
+                Player temp = currentPlayer;
+                currentPlayer = otherPlayer;
+                otherPlayer = temp;
             }
         }
+
+        System.out.println(currentPlayer.name + " won. Congratulations!");
     }
 
-    private static void createBoard() {
-        board[0][0] = "  ";
-        for (int j = 1; j < BOARD_SIZE; j++) {
-            board[0][j] = j + " ";
-        }
-        for (int i = 1; i < BOARD_SIZE; i++) {
-            board[i][0] = aToJ.charAt(i - 1) + " ";
-            for (int j = 1; j < BOARD_SIZE; j++) {
-                board[i][j] = EMPTY_CELL + " ";
-            }
-        }
-    }
-
-    private static void printBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(board[i][j]);
+    private static void printGameState(Player currentPlayer, Player otherPlayer) {
+        System.out.println("  1 2 3 4 5 6 7 8 9 10");
+        for (int i = 1; i < 11; i++) {
+            System.out.print((char)('A' + i - 1) + " ");
+            for (int j = 1; j < 11; j++) {
+                System.out.print(otherPlayer.board.boardVisual[i][j] + " ");
             }
             System.out.println();
         }
-        System.out.println();
-    }
-
-    private static int getRowIndex(char rowChar) {
-        return aToJ.indexOf(rowChar) + 1;
+        System.out.println("---------------------");
+        System.out.println("  1 2 3 4 5 6 7 8 9 10");
+        for (int i = 1; i < 11; i++) {
+            System.out.print((char)('A' + i - 1) + " ");
+            for (int j = 1; j < 11; j++) {
+                System.out.print(currentPlayer.board.boardMain[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
+
